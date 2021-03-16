@@ -1,0 +1,37 @@
+<div class="topic-index-wrapper">
+  <div class="container">
+    <% @topics.each do |topic| %>
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="topic-index-single">
+            <h2 class="topic-author">
+              <%= topic.user.name %>
+            </h2>
+            <%= image_tag topic.image.url %>
+            <!--!は論理演算子の否定を表す。この場合は真偽値がひっくり返る-->
+            <!--?は真偽値を返すメソッド。tureかfalseを返す-->
+            <!--いいねしたユーザーではなかったら(fause)-->
+            <% if !topic.favorite_users.include?(current_user) %>
+              <%= link_to favorites_path(topic_id: topic.id), method: :post do %>
+                <%= image_tag 'icons/heart-black.png', class: 'topic-index-icon' %>
+              <% end %>
+            <!--いいねしたユーザーは赤色に変更-->
+            <% else %>
+              <%= link_to favorites_path(topic_id: topic.id), method: :delete do %>
+                  <%= image_tag 'icons/heart.png', class: 'topic-index-icon-filter-red' %>
+              <% end %>
+            <% end %>
+            
+            <!--いいねのカウント-->
+            <%= topic.favorite_users.count %>
+            
+            <%= image_tag 'icons/comment.png', class: 'topic-index-icon' %>
+            <p class="topic-text">
+              <%= topic.description %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
